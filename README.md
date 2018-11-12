@@ -16,15 +16,18 @@ your clients all support Websockets
 you don't see the point in programming multiple API endpoints - some REST over HTTP, some over Websockets.
 ## Details
 
-##### Requests
+##### Request
 
-Incoming requests are native ```object```, presumably transmitted over the wire using JSON.  You can do this yourself, or you can use a library like [Sockhop](https://www.npmjs.com/package/sockhop "Sockhop on NPM"). 
+Incoming requests are simple native ```object```, presumably transmitted over the wire using JSON.  You can do this yourself, or you can use a library like [Sockhop](https://www.npmjs.com/package/sockhop "Sockhop on NPM"). 
 
 
-| Parameter | Type   | Example           | 
-|-----------|--------|-------------------|
-| method    | string | "POST"            |
-| path      | string | "/photos/cat.jpg" |
+| Parameter | Type   | Example           | Required | Notes                                                  |
+|-----------|--------|-------------------|----------|--------------------------------------------------------|
+| method    | string | "POST"            | Y        |                                                        |
+| path      | string | "/photos/cat.jpg" | Y        |                                                        |
+| params    | object | { id: 23}         | N        |  RESERVED - auto populated from URL capture parameters |
+| {...}     | any    |                   | N        | User managed, passed to handler                        |
+
 ```json
 {
 	"method": "GET",
