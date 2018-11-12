@@ -145,7 +145,7 @@ class Response {
 
 /**
  * 
- * Global definition of requestHandler
+ * requestHandler(req, response)
  *
  * @callback requestHandler
  * @param {Request} req the request object
@@ -154,14 +154,14 @@ class Response {
 
 /**
  * 
- * Global definition of responseHandler
+ * responseHandler(response)
  *
  * @callback responseHandler
  * @param {Response} response the response that should be sent back to the client
  */
 
 /**
- * Global definition of Request has
+ * Global definition of Request object
  *
  * @typedef Request
  * @type {object}
@@ -242,9 +242,9 @@ class Restos {
 	 * 
 	 * Call this when new data has been received for processing
 	 *
-	 * @param {object} the received object (do not pass a string, de/encoding is your responsibility)
+	 * @param {object} data the received data from the client (do not pass a string, de/encoding is your responsibility)
 	 * @param {responseHandler} callback 
-	 * @return {Response} the Response that was (or will be) sent - caution, this happens asynchronously so the Response may still be changing when you get it back
+	 * @return {Response} Response that was (or will be) sent - caution, this happens asynchronously so the Response may still be changing when you get it back
 	 */
 	receive(o={}, callback){
 

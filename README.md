@@ -182,13 +182,13 @@ restos.get("/some/path", (req, res)=>{
 
 <dl>
 <dt><a href="#requestHandler">requestHandler</a> : <code>function</code></dt>
-<dd><p>Global definition of requestHandler</p>
+<dd><p>requestHandler(req, response)</p>
 </dd>
 <dt><a href="#responseHandler">responseHandler</a> : <code>function</code></dt>
-<dd><p>Global definition of responseHandler</p>
+<dd><p>responseHandler(response)</p>
 </dd>
 <dt><a href="#Request">Request</a> : <code>object</code></dt>
-<dd><p>Global definition of Request has</p>
+<dd><p>Global definition of Request object</p>
 </dd>
 </dl>
 
@@ -297,7 +297,7 @@ REST over sockets
     * [.post(path, handler)](#Restos+post) ⇒ <code>object</code>
     * [.get(path, handler)](#Restos+get) ⇒ <code>object</code>
     * [.patch(path, handler)](#Restos+patch) ⇒ <code>object</code>
-    * [.receive(the, callback)](#Restos+receive) ⇒ [<code>Response</code>](#Response)
+    * [.receive(data, callback)](#Restos+receive) ⇒ [<code>Response</code>](#Response)
 
 <a name="Restos+put"></a>
 
@@ -376,23 +376,23 @@ Add a route handler for PATCH on a given path
 
 <a name="Restos+receive"></a>
 
-### restos.receive(the, callback) ⇒ [<code>Response</code>](#Response)
+### restos.receive(data, callback) ⇒ [<code>Response</code>](#Response)
 Receive
 
 Call this when new data has been received for processing
 
 **Kind**: instance method of [<code>Restos</code>](#Restos)  
-**Returns**: [<code>Response</code>](#Response) - the Response that was (or will be) sent - caution, this happens asynchronously so the Response may still be changing when you get it back  
+**Returns**: [<code>Response</code>](#Response) - Response that was (or will be) sent - caution, this happens asynchronously so the Response may still be changing when you get it back  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| the | <code>object</code> | received object (do not pass a string, de/encoding is your responsibility) |
+| data | <code>object</code> | the received data from the client (do not pass a string, de/encoding is your responsibility) |
 | callback | [<code>responseHandler</code>](#responseHandler) |  |
 
 <a name="requestHandler"></a>
 
 ## requestHandler : <code>function</code>
-Global definition of requestHandler
+requestHandler(req, response)
 
 **Kind**: global typedef  
 
@@ -404,7 +404,7 @@ Global definition of requestHandler
 <a name="responseHandler"></a>
 
 ## responseHandler : <code>function</code>
-Global definition of responseHandler
+responseHandler(response)
 
 **Kind**: global typedef  
 
@@ -415,7 +415,7 @@ Global definition of responseHandler
 <a name="Request"></a>
 
 ## Request : <code>object</code>
-Global definition of Request has
+Global definition of Request object
 
 **Kind**: global typedef  
 **Properties**
