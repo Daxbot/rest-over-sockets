@@ -10,9 +10,9 @@ REST API over (Web)sockets using an [Express](https://www.npmjs.com/package/expr
 ## Why
 
 You have an application whose only clients connect directly over TCP/IP
-or 
+- or -  
 your clients all support Websockets
-and
+- and -  
 you don't see the point in programming multiple API endpoints - some REST over HTTP, some over Websockets.
 ## Details
 
@@ -27,8 +27,8 @@ Incoming requests are native ```object```, presumably transmitted over the wire 
 | path      | string | "/photos/cat.jpg" |
 ```json
 {
-	method: "GET",
-	path: "/apple/3444"
+	"method": "GET",
+	"path": "/apple/3444"
 }
 ```
 
