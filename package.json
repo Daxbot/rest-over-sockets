@@ -1,0 +1,20 @@
+{
+  "name": "rest-over-sockets",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "route-parser": "0.0.5"
+  },
+  "devDependencies": {
+    "jsdoc-to-markdown": "^4.0.1",
+    "mocha": "^5.2.0",
+    "sockhop": "^1.4.2",
+    "ws": "^6.1.0"
+  }
+}
