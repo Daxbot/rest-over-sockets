@@ -1,6 +1,6 @@
 {
   "name": "rest-over-sockets",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "REST without HTTP over (web)sockets",
   "main": "index.js",
   "scripts": {
@@ -11,7 +11,7 @@
     "url": "https://github.com/DaxBot/rest-over-sockets"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "route-parser": "0.0.5"
   },

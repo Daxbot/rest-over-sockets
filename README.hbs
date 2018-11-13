@@ -36,7 +36,7 @@ Incoming requests are simple native ```object```, presumably transmitted over th
 ```
 
 ##### Response
-Outgoing data conform to [JSON API](https://jsonapi.org/) spec.  Errors in your code are automatically turned into HTTP style ```500``` errors.  Routes that don't exist return a HTTP style ```404``` error.
+Outgoing data conform to [JSON API](https://jsonapi.org/) spec.  If your hanlder throws an exception, the error will automatically result in a HTTP style ```500``` response.  Routes that don't exist return a HTTP style ```404``` error.
 ```json
 {
     "status": 200,
