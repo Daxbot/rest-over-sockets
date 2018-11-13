@@ -1,6 +1,6 @@
 {
   "name": "rest-over-sockets",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "REST without HTTP over (web)sockets",
   "main": "index.js",
   "scripts": {
