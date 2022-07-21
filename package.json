@@ -1,10 +1,16 @@
 {
   "name": "rest-over-sockets",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "REST without HTTP over (web)sockets",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "build": "node build-tools/generate_docs.js",
+    "lint": "npx eslint index.js lib/ test/",
+    "lint:fix": "npx eslint index.js lib/ test/ --fix"
+  },
+  "engines": {
+    "node": ">=12"
   },
   "repository": {
     "type": "git",
@@ -16,9 +22,12 @@
     "route-parser": "0.0.5"
   },
   "devDependencies": {
-    "jsdoc-to-markdown": "^4.0.1",
-    "mocha": "^5.2.0",
-    "sockhop": "^1.4.2",
-    "ws": "^6.1.0"
+    "eslint": "^8.20.0",
+    "eslint-plugin-jsdoc": "^39.3.3",
+    "eslint-plugin-node": "^11.1.0",
+    "jsdoc-to-markdown": "^7.1.1",
+    "mocha": "^10.0.0",
+    "sockhop": "^1.8.0",
+    "ws": "^8.8.1"
   }
 }

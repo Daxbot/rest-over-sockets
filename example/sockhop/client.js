@@ -1,4 +1,5 @@
-const client=new (require("sockhop").client)();
+const sock=new (require("sockhop").client)();
+const client = new (require("../../lib/ROSClient.js"))(sock);
 
 client.connect().then(()=>{
 
