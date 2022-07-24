@@ -2,15 +2,17 @@ const server=new (require("sockhop").server)();
 const restos=new (require("../../"))();
 
 server.listen();
-server.on("receive", (o, meta)=>restos.receive(o, meta.callback));
+server.on("request", (req,res,meta)=> {
+    if ( req.type !== "ROSRequest" ) return; // ignore other types
+    restos.receive(req.data, (obj) => res.send(obj))
+});
 
 
 restos.get("/apple/:id", (req, res)=>{
-
-		res
-    	.set('Content-Type', 'text/json')
+        res
+        .set('Content-Type', 'text/json')
         .status(200)
         .data("Apple", req.params.id, { flavor: "sweet" })
-        .send();	
+        .send();    
 });
 

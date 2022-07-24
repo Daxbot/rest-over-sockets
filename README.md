@@ -23,12 +23,14 @@ Check out the [full documentation here](API.md)
 Incoming requests are simple native ```object```, presumably transmitted over the wire using JSON.  You can do this yourself, or you can use a library like [Sockhop](https://www.npmjs.com/package/sockhop "Sockhop on NPM"). 
 
 
-| Parameter | Type   | Example           | Required | Notes                                                  |
-|-----------|--------|-------------------|----------|--------------------------------------------------------|
-| method    | string | "POST"            | Y        |                                                        |
-| path      | string | "/photos/cat.jpg" | Y        |                                                        |
-| params    | object | { id: 23}         | N        |  RESERVED - auto populated from URL capture parameters |
-| {...}     | any    |                   | N        | User managed, passed to handler                        |
+| Parameter | Type    | Example                                | Required | Notes                                                  |
+|-----------|---------|----------------------------------------|----------|--------------------------------------------------------|
+| method    | string  | "POST"                                 | Y        |                                                        |
+| path      | string  | "/photos/cat.jpg"                      | Y        |                                                        |
+| header    | ?object | { "Content-Type": "application/json" } | N        |                                                        |
+| body      | ?object | { "some": "data" }                     | N        |                                                        |
+| {...}     | any     |                                        | N        | User managed, passed to handler                        |
+| params    | object  | { id: 23 }                             |          |  RESERVED - auto populated from URL capture parameters |
 
 ```json
 {
@@ -106,7 +108,8 @@ ws.on("message", (data)=>{
 });
 ```
 Of course, Websockets has it's limitations.  If you are able to use native sockets, use Sockhop since it will automatically handle remote callbacks to ensure the response is given to the request that called it.  It also handles JSON encoding and possible packetization / fragmentation across the wire.
-##### Server using Websockets
+
+##### Server using Sockhop callbacks (old-style)
 ```javascript
 const server=new (require("sockhop").server)();
 const restos=new (require("rest-over-sockets"))();
@@ -122,7 +125,7 @@ restos.get("/apple/:id", (req, res)=>{
         .send();  
 });
 ```
-##### Client using Websockets
+##### Client using Sockhop callbacks (old-style)
 ```javascript
 const client=new (require("sockhop").client)();
 
@@ -136,6 +139,38 @@ client.connect().then(()=>{
     console.log(`Response: ${JSON.stringify(response)}`);
     client.disconnect();
   });
+});
+```
+
+##### Server using Sockhop requests (new-style)
+```javascript
+const server=new (require("sockhop").server)();
+const restos=new (require("rest-over-sockets"))();
+
+server.listen();
+server.on("request", (req,res,meta)=> {
+    if ( req.type !== "ROSRequest" ) return; // ignore other types
+    restos.receive(req.data, (obj) => res.send(obj))
+});
+
+restos.get("/apple/:id", (req, res)=>{
+    res
+      .set('Content-Type', 'text/json')
+        .status(200)
+        .data("Apple", req.params.id, { flavor: "sweet" })
+        .send();  
+});
+```
+##### Client using Sockhop requests (new-style)
+```javascript
+const sock=new (require("../../../sockhop").client)();
+const client = new (require("../../lib/ROSClient.js"))(sock);
+
+client.sockhop.connect().then(()=>{
+    return client.get("/apple/3444")
+}).then(response => {
+    console.log(`Response: ${JSON.stringify(response)}`);
+    client.sockhop.disconnect();
 });
 ```
 
@@ -171,6 +206,9 @@ restos.get("/some/path", (req, res)=>{
 ```
 
 ## TODO
+  - Add cookie support?
+  - Support streaming?
+  - Support more content types?
 
 ## License
 MIT
