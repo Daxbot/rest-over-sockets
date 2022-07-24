@@ -7,7 +7,7 @@ describe("REST methods",()=>{
 
     (["GET", "POST", "DELETE", "PUT", "PATCH"]).forEach((method)=>{
 
-        it(method, (done)=>{
+        it(method, async ()=>{
 
             let restos=new Restos();
 
@@ -15,7 +15,7 @@ describe("REST methods",()=>{
             restos[method.toLowerCase()]("/apple/:id", (req, res)=>{
 
                 res
-                    .set('Content-Type', 'text/json')
+                    .set('Content-Type', 'application/json')
                     .status(200)
                     .data("Apple", req.params.id, { flavor: "sweet" })
                     .send();
@@ -23,21 +23,15 @@ describe("REST methods",()=>{
 
 
             // Transmit a payload to the server
-            restos.receive({
-
+            await restos.receive({
                 method: method,
                 path: "/apple/3444"
             },(response)=>{
-
-                assert.deepEqual(response, {"status":200,"headers":{"Content-Type":"text/json"},"data":[{"type":"Apple","id":"3444","attributes":{"flavor":"sweet"}}]});
-                done();
+                assert.deepEqual(response, {"status":200,"headers":{"Content-Type":"application/json"},"data":[{"type":"Apple","id":"3444","attributes":{"flavor":"sweet"}}]});
             });
 
         });
-
-
     });
-
 });
 
 describe("Restos class",()=>{
@@ -53,42 +47,42 @@ describe("Restos class",()=>{
 
         });
 
-        it("returns 400 error if missing .path or .method",()=>{
+        it("returns 400 error if missing .path or .method", async ()=>{
 
             let r=new Restos();
-            r.receive({method: "POST"},(response)=>{
+            await r.receive({method: "POST"},(response)=>{
 
                 assert.deepEqual(response, {
                     status: 400,
-                    headers: { 'Content-Type': 'text/json' },
+                    headers: { 'Content-Type': 'application/json' },
                     errors:
-					[ { title: 'Bad Request', detail: 'Restos.receive() requires the first parameter to contain a value called \'path\'' } ] });
+                    [ { title: 'Bad Request', detail: "Request path must be type 'string', got 'object'" } ] });
             });
 
 
-            r.receive({path: "/something"},(response)=>{
+            await r.receive({path: "/something"},(response)=>{
 
                 assert.deepEqual(response, {
                     status: 400,
-                    headers: { 'Content-Type': 'text/json' },
+                    headers: { 'Content-Type': 'application/json' },
                     errors:
-					[ { title: 'Bad Request', detail: 'Restos.receive() requires the first parameter to contain a value called \'method\'' } ] });
+                    [ { title: 'Bad Request', detail: "Request method must be type 'string', got 'object'" } ] });
             });
 
 
         });
 
-        it("returns 404 error if path not found",()=>{
+        it("returns 404 error if path not found",async ()=>{
 
             let r=new Restos();
 
-            r.receive({path: "/something", method: "GET"},(response)=>{
+            await r.receive({path: "/something", method: "GET"},(response)=>{
 
                 assert.deepEqual(response, {
                     status: 404,
-                    headers: { 'Content-Type': 'text/json' },
+                    headers: { 'Content-Type': 'application/json' },
                     errors:
-					[ { title: 'Not Found', detail: 'The page or resource you are looking for does not exist' } ] });
+                    [ { title: 'Not Found', detail: 'The page or resource you are looking for does not exist' } ] });
             });
 
 
@@ -96,7 +90,7 @@ describe("Restos class",()=>{
 
 
 
-        it("returns 500 error if route throws an exception",(done)=>{
+        it("returns 500 error if route throws an exception",async ()=>{
 
             let r=new Restos();
 
@@ -106,26 +100,15 @@ describe("Restos class",()=>{
                 throw new Error("This is an error");
             });
 
-            r.receive({path: "/throw/an/error", method: "POST"},(response)=>{
+            await r.receive({path: "/throw/an/error", method: "POST"},(response)=>{
 
                 assert.deepEqual(response, {
                     status: 500,
-                    headers: { 'Content-Type': 'text/json' },
+                    headers: { 'Content-Type': 'application/json' },
                     errors:
-					[ { title: 'Internal Error', detail: 'This is an error' } ]
+                    [ { title: 'Internal Error', detail: 'This is an error' } ]
                 });
-
-                done();
-
             });
-
-
         });
-
-
     });
-
-
-
-
 });
