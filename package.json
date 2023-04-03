@@ -1,6 +1,6 @@
 {
   "name": "rest-over-sockets",
-  "version": "1.1.1",
+  "version": "2.0.0",
   "description": "REST without HTTP over (web)sockets",
   "main": "index.js",
   "scripts": {
@@ -27,6 +27,8 @@
     "eslint-plugin-node": "^11.1.0",
     "jsdoc-to-markdown": "^7.1.1",
     "mocha": "^10.0.0",
+    "socket.io": "^4.6.1",
+    "socket.io-client": "^4.6.1",
     "sockhop": "^1.8.0",
     "ws": "^8.8.1"
   }
