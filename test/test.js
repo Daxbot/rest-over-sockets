@@ -1,4 +1,5 @@
 const assert=require("assert");
+const expect = require("chai").expect; // eslint-disable-line node/no-unpublished-require
 const Restos=require("../index.js");
 
 
@@ -31,6 +32,70 @@ describe("REST methods",()=>{
             });
 
         });
+    });
+});
+
+describe("Parameters",()=>{
+
+    it("params", async () => {
+        let restos=new Restos();
+
+        // Set up a route
+        restos.get("/apple/:id", (req, res)=>{
+            return res
+                .set('Content-Type', 'application/json')
+                .status(200)
+                .send(req.params);
+        });
+
+        // Transmit a payload to the server
+        const response = await new Promise(res => restos.receive({
+            method: "GET",
+            path: "/apple/3444"
+        },res))
+
+        expect(response.data.id).to.equal("3444");
+    });
+
+    it("empty query", async () => {
+        let restos=new Restos();
+
+        // Set up a route
+        restos.get("/apple/:id", (req, res)=>{
+            return res
+                .set('Content-Type', 'application/json')
+                .status(200)
+                .send(req.query);
+        });
+
+        // Transmit a payload to the server
+        const response = await new Promise(res => restos.receive({
+            method: "GET",
+            path: "/apple/3444"
+        },res))
+
+        expect(response.data).to.be.an("object");
+        expect(Object.keys(response.data).length).to.equal(0);
+    });
+
+    it("query", async () => {
+        let restos=new Restos();
+
+        // Set up a route
+        restos.get("/apple/:id", (req, res)=>{
+            return res
+                .set('Content-Type', 'application/json')
+                .status(200)
+                .send(req.query);
+        });
+
+        // Transmit a payload to the server
+        const response = await new Promise(res => restos.receive({
+            method: "GET",
+            path: "/apple/3444?limit=15"
+        },res))
+
+        expect(response.data.limit).to.equal("15");
     });
 });
 

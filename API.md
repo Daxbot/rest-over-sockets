@@ -166,38 +166,43 @@ are hosting ROSApps more easily.
 **Kind**: global class  
 
 * [ROSClient](#ROSClient)
-    * [new ROSClient(sockhop)](#new_ROSClient_new)
-    * [.$(obj)](#ROSClient+$) ⇒ [<code>Promise.&lt;ROSResponseObject&gt;</code>](#ROSResponseObject)
-    * [.get(path, [headers])](#ROSClient+get) ⇒ [<code>Promise.&lt;ROSResponseObject&gt;</code>](#ROSResponseObject)
-    * [.delete(path, [headers])](#ROSClient+delete) ⇒ [<code>Promise.&lt;ROSResponseObject&gt;</code>](#ROSResponseObject)
-    * [.post(path, [body], [headers])](#ROSClient+post) ⇒ [<code>Promise.&lt;ROSResponseObject&gt;</code>](#ROSResponseObject)
-    * [.put(path, [body], [headers])](#ROSClient+put) ⇒ [<code>Promise.&lt;ROSResponseObject&gt;</code>](#ROSResponseObject)
-    * [.patch(path, [body], [headers])](#ROSClient+patch) ⇒ [<code>Promise.&lt;ROSResponseObject&gt;</code>](#ROSResponseObject)
+    * [new ROSClient(controller)](#new_ROSClient_new)
+    * _instance_
+        * [.$(obj, [opts])](#ROSClient+$) ⇒ [<code>Promise.&lt;ROSResponseObject&gt;</code>](#ROSResponseObject)
+        * [.get(path, [headers])](#ROSClient+get) ⇒ [<code>Promise.&lt;ROSResponseObject&gt;</code>](#ROSResponseObject)
+        * [.delete(path, [headers])](#ROSClient+delete) ⇒ [<code>Promise.&lt;ROSResponseObject&gt;</code>](#ROSResponseObject)
+        * [.post(path, [body], [headers])](#ROSClient+post) ⇒ [<code>Promise.&lt;ROSResponseObject&gt;</code>](#ROSResponseObject)
+        * [.put(path, [body], [headers])](#ROSClient+put) ⇒ [<code>Promise.&lt;ROSResponseObject&gt;</code>](#ROSResponseObject)
+        * [.patch(path, [body], [headers])](#ROSClient+patch) ⇒ [<code>Promise.&lt;ROSResponseObject&gt;</code>](#ROSResponseObject)
+    * _static_
+        * [.sockhop(sockhop)](#ROSClient.sockhop)
+        * [.socketio(io)](#ROSClient.socketio)
 
 <a name="new_ROSClient_new"></a>
 
-### new ROSClient(sockhop)
+### new ROSClient(controller)
 Constructor
 
 
 | Param | Type |
 | --- | --- |
-| sockhop | <code>sockhop.SockhopClient</code> \| <code>sockhop.SockhopSession</code> | 
+| controller | <code>Controller</code> | 
 
 <a name="ROSClient+$"></a>
 
-### rosClient.$(obj) ⇒ [<code>Promise.&lt;ROSResponseObject&gt;</code>](#ROSResponseObject)
+### rosClient.$(obj, [opts]) ⇒ [<code>Promise.&lt;ROSResponseObject&gt;</code>](#ROSResponseObject)
 Make a request
 
 **Kind**: instance method of [<code>ROSClient</code>](#ROSClient)  
 
-| Param | Type |
-| --- | --- |
-| obj | <code>object</code> | 
-| obj.method | <code>string</code> | 
-| obj.path | <code>string</code> | 
-| obj.body | <code>object</code> | 
-| obj.headers | <code>object</code> | 
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| obj | <code>object</code> |  |  |
+| obj.method | <code>string</code> |  |  |
+| obj.path | <code>string</code> |  |  |
+| obj.body | <code>object</code> |  |  |
+| obj.headers | <code>object</code> |  |  |
+| [opts] | <code>object</code> | <code>{}</code> | Options to pass to the underlying controller |
 
 <a name="ROSClient+get"></a>
 
@@ -261,6 +266,28 @@ Make a PATCH request
 | path | <code>string</code> |  | 
 | [body] | <code>object</code> | <code>{}</code> | 
 | [headers] | <code>object</code> | <code>{}</code> | 
+
+<a name="ROSClient.sockhop"></a>
+
+### ROSClient.sockhop(sockhop)
+Create a new Sockhop-based ROSClient
+
+**Kind**: static method of [<code>ROSClient</code>](#ROSClient)  
+
+| Param | Type |
+| --- | --- |
+| sockhop | <code>Sockhop.client</code> \| <code>Sockhop.session</code> | 
+
+<a name="ROSClient.socketio"></a>
+
+### ROSClient.socketio(io)
+Create a new socket.io-based ROSClient
+
+**Kind**: static method of [<code>ROSClient</code>](#ROSClient)  
+
+| Param | Type |
+| --- | --- |
+| io | <code>\*</code> | 
 
 <a name="ROSRequest"></a>
 
@@ -523,12 +550,14 @@ send the ROSRequest instance (no just the serialized version).
 **Kind**: global typedef  
 **Properties**
 
-| Name | Type | Description |
-| --- | --- | --- |
-| path | <code>string</code> | the requested path |
-| method | <code>string</code> | GET, PUT, POST, etc |
-| headers | <code>object</code> | any header information, like 'Content-Type' |
-| body | <code>object</code> | an optional body (for POST/PUT/PATCH) |
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| path | <code>string</code> |  | the requested path |
+| method | <code>string</code> |  | GET, PUT, POST, etc |
+| headers | <code>object</code> |  | any header information, like 'Content-Type' |
+| [params] | <code>object</code> | <code>{}</code> | any parameters captured from the path (i.e. `{ id: "15" }` for '/api/user/15') |
+| [query] | <code>object</code> | <code>{}</code> | an query parameters parsed from the path's query section (i.e. `{ limit:"15" }` for '/api/users?limit=15') |
+| body | <code>object</code> |  | an optional body (for POST/PUT/PATCH) |
 
 <a name="ROSResponseObject"></a>
 
