@@ -12,7 +12,6 @@ restos.get("/apple/:id", (req, res)=>{
         res
         .set('Content-Type', 'text/json')
         .status(200)
-        .data("Apple", req.params.id, { flavor: "sweet" })
-        .send();    
+        .json([{ type:"Apple", id:req.params.id, attributes:{ flavor: "sweet" }}])
 });
 

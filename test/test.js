@@ -18,8 +18,7 @@ describe("REST methods",()=>{
                 res
                     .set('Content-Type', 'application/json')
                     .status(200)
-                    .data("Apple", req.params.id, { flavor: "sweet" })
-                    .send();
+                    .json([{ type:"Apple", id:req.params.id, attributes:{ flavor: "sweet" }}])
             });
 
 
@@ -28,7 +27,7 @@ describe("REST methods",()=>{
                 method: method,
                 path: "/apple/3444"
             },(response)=>{
-                assert.deepEqual(response, {"status":200,"headers":{"Content-Type":"application/json"},"data":[{"type":"Apple","id":"3444","attributes":{"flavor":"sweet"}}]});
+                assert.deepEqual(response, {"statusCode":200,"headers":{"content-type":"application/json"},"data":[{"type":"Apple","id":"3444","attributes":{"flavor":"sweet"}}]});
             });
 
         });
@@ -145,20 +144,20 @@ describe("Restos class",()=>{
             await r.receive({method: "POST"},(response)=>{
 
                 assert.deepEqual(response, {
-                    status: 400,
-                    headers: { 'Content-Type': 'application/json' },
-                    errors:
-                    [ { title: 'Bad Request', detail: "Request path must be type 'string', got 'object'" } ] });
+                    statusCode: 400,
+                    headers: { 'content-type': 'application/json' },
+                    data: { title: 'Bad Request', detail: "Request path must be type 'string', got 'object'" }
+                });
             });
 
 
             await r.receive({path: "/something"},(response)=>{
 
                 assert.deepEqual(response, {
-                    status: 400,
-                    headers: { 'Content-Type': 'application/json' },
-                    errors:
-                    [ { title: 'Bad Request', detail: "Request method must be type 'string', got 'object'" } ] });
+                    statusCode: 400,
+                    headers: { 'content-type': 'application/json' },
+                    data: { title: 'Bad Request', detail: "Request method must be type 'string', got 'object'" }
+                });
             });
 
 
@@ -171,10 +170,10 @@ describe("Restos class",()=>{
             await r.receive({path: "/something", method: "GET"},(response)=>{
 
                 assert.deepEqual(response, {
-                    status: 404,
-                    headers: { 'Content-Type': 'application/json' },
-                    errors:
-                    [ { title: 'Not Found', detail: 'The page or resource you are looking for does not exist' } ] });
+                    statusCode: 404,
+                    headers: { 'content-type': 'application/json' },
+                    data: { title: 'Not Found', detail: 'The page or resource you are looking for does not exist' }
+                });
             });
 
 
@@ -195,10 +194,9 @@ describe("Restos class",()=>{
             await r.receive({path: "/throw/an/error", method: "POST"},(response)=>{
 
                 assert.deepEqual(response, {
-                    status: 500,
-                    headers: { 'Content-Type': 'application/json' },
-                    errors:
-                    [ { title: 'Internal Error', detail: 'This is an error' } ]
+                    statusCode: 500,
+                    headers: { 'content-type': 'application/json' },
+                    data: { title: 'Internal Error', detail: 'This is an error' }
                 });
             });
         });

@@ -220,7 +220,7 @@ Make a request
 | obj.method | <code>string</code> |  |  |
 | obj.path | <code>string</code> |  |  |
 | obj.body | <code>object</code> |  |  |
-| obj.headers | <code>object</code> |  |  |
+| obj.headers | <code>object</code> |  | Note, unlike express, these are case-sensitive. |
 | [opts] | <code>object</code> | <code>{}</code> | Options to pass to the underlying controller |
 
 <a name="ROSClient+get"></a>
@@ -320,6 +320,11 @@ ROSRequest
     * _instance_
         * [.path](#ROSRequest+path) : <code>string</code>
         * [.method](#ROSRequest+method) : <code>string</code>
+        * [.get(key)](#ROSRequest+get) ⇒ <code>string</code>
+        * [.setHeader(key, value)](#ROSRequest+setHeader) ⇒ <code>this</code>
+        * [.getHeader(key)](#ROSRequest+getHeader) ⇒ <code>string</code>
+        * [.hasHeader(key)](#ROSRequest+hasHeader) ⇒ <code>boolean</code>
+        * [.toJSON()](#ROSRequest+toJSON) ⇒ [<code>ROSRequestObject</code>](#ROSRequestObject)
     * _static_
         * [.parse(obj)](#ROSRequest.parse) ⇒ [<code>ROSRequest</code>](#ROSRequest)
 
@@ -329,13 +334,13 @@ ROSRequest
 Constructor
 
 
-| Param | Type | Default |
-| --- | --- | --- |
-| obj | <code>object</code> |  | 
-| [obj.path] | <code>string</code> | <code>null</code> | 
-| [obj.method] | <code>string</code> | <code>null</code> | 
-| [obj.headers] | <code>object</code> |  | 
-| [obj.body] | <code>object</code> |  | 
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| obj | <code>object</code> |  |  |
+| [obj.path] | <code>string</code> | <code>null</code> |  |
+| [obj.method] | <code>string</code> | <code>null</code> |  |
+| [obj.headers] | <code>object</code> |  | if an object, the keys will be forced to lower case (a. la. express.js) |
+| [obj.body] | <code>object</code> |  |  |
 
 <a name="ROSRequest+path"></a>
 
@@ -353,6 +358,57 @@ Must be one of: GET, POST, PUT, PATCH, DELETE.
 Automatically converted to lower case.
 
 **Kind**: instance property of [<code>ROSRequest</code>](#ROSRequest)  
+<a name="ROSRequest+get"></a>
+
+### rosRequest.get(key) ⇒ <code>string</code>
+Get a header from a key (alias for .getHeader() c.f. express)
+
+**Kind**: instance method of [<code>ROSRequest</code>](#ROSRequest)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| key | <code>string</code> | NOTE: this will be forced to lower case |
+
+<a name="ROSRequest+setHeader"></a>
+
+### rosRequest.setHeader(key, value) ⇒ <code>this</code>
+Set a header to value
+
+**Kind**: instance method of [<code>ROSRequest</code>](#ROSRequest)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| key | <code>string</code> | NOTE: this will be forced to lower case |
+| value | <code>string</code> | the value of the header |
+
+<a name="ROSRequest+getHeader"></a>
+
+### rosRequest.getHeader(key) ⇒ <code>string</code>
+Get a header from a key
+
+**Kind**: instance method of [<code>ROSRequest</code>](#ROSRequest)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| key | <code>string</code> | NOTE: this will be forced to lower case |
+
+<a name="ROSRequest+hasHeader"></a>
+
+### rosRequest.hasHeader(key) ⇒ <code>boolean</code>
+Check if a header exists
+
+**Kind**: instance method of [<code>ROSRequest</code>](#ROSRequest)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| key | <code>string</code> | NOTE: this will be forced to lower case |
+
+<a name="ROSRequest+toJSON"></a>
+
+### rosRequest.toJSON() ⇒ [<code>ROSRequestObject</code>](#ROSRequestObject)
+Custom JSON stringify method
+
+**Kind**: instance method of [<code>ROSRequest</code>](#ROSRequest)  
 <a name="ROSRequest.parse"></a>
 
 ### ROSRequest.parse(obj) ⇒ [<code>ROSRequest</code>](#ROSRequest)
@@ -374,53 +430,44 @@ Approximately the same as an express Response object
 **Kind**: global class  
 
 * [ROSResponse](#ROSResponse)
-    * [new ROSResponse([status], [content_type])](#new_ROSResponse_new)
-    * [.callback](#ROSResponse+callback) : [<code>responseHandler</code>](#responseHandler)
-    * [.data(type, id, attributes)](#ROSResponse+data) ⇒ <code>this</code>
-    * [.error(title, opts)](#ROSResponse+error) ⇒ <code>this</code>
-    * [.end()](#ROSResponse+end) ⇒ <code>this</code>
-    * [.get(name)](#ROSResponse+get) ⇒ <code>string</code>
-    * [.json([data])](#ROSResponse+json) ⇒ <code>this</code>
-    * [.send([data])](#ROSResponse+send) ⇒ <code>this</code>
-    * [.sendStatus(code)](#ROSResponse+sendStatus) ⇒ <code>this</code>
-    * [.set(name, value)](#ROSResponse+set) ⇒ <code>this</code>
-    * [.status(status)](#ROSResponse+status) ⇒ <code>this</code>
+    * [new ROSResponse(obj)](#new_ROSResponse_new)
+    * _instance_
+        * [.toJSON()](#ROSResponse+toJSON) ⇒ [<code>ROSResponseObject</code>](#ROSResponseObject)
+        * [.error(title, opts)](#ROSResponse+error) ⇒ <code>this</code>
+        * [.end()](#ROSResponse+end) ⇒ <code>this</code>
+        * [.get(key)](#ROSResponse+get) ⇒ <code>string</code>
+        * [.set(key, value)](#ROSResponse+set) ⇒ <code>this</code>
+        * [.status(status)](#ROSResponse+status) ⇒ <code>this</code>
+        * [.json([data])](#ROSResponse+json) ⇒ <code>this</code>
+        * [.send([data])](#ROSResponse+send) ⇒ <code>this</code>
+        * [.sendStatus(code)](#ROSResponse+sendStatus) ⇒ <code>this</code>
+        * [.setHeader(key, value)](#ROSResponse+setHeader) ⇒ <code>this</code>
+        * [.getHeader(key)](#ROSResponse+getHeader) ⇒ <code>string</code>
+        * [.hasHeader(key)](#ROSResponse+hasHeader) ⇒ <code>boolean</code>
+    * _static_
+        * [.new(cb)](#ROSResponse.new) ⇒ [<code>ROSResponse</code>](#ROSResponse)
 
 <a name="new_ROSResponse_new"></a>
 
-### new ROSResponse([status], [content_type])
+### new ROSResponse(obj)
 Constructor
 
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| [status] | <code>number</code> | <code>200</code> | the HTTP status code |
-| [content_type] | <code>string</code> | <code>&quot;&#x27;application/json&#x27;&quot;</code> | the content type to use |
+| obj | <code>object</code> |  |  |
+| [obj.statusCode] | <code>number</code> | <code>200</code> | the HTTP status code |
+| obj.headers | <code>object</code> |  | any header information (NOTE will be lower cased) |
+| [obj.data] | <code>object</code> |  |  |
+| [obj.callback] | [<code>responseHandler</code>](#responseHandler) | <code>()&#x3D;&gt;{}</code> |  |
+| [obj.sent] | <code>boolean</code> | <code>false</code> |  |
 
-<a name="ROSResponse+callback"></a>
+<a name="ROSResponse+toJSON"></a>
 
-### rosResponse.callback : [<code>responseHandler</code>](#responseHandler)
-Response callback handler
-
-This gets given the response payload to send over the wire
-
-**Kind**: instance property of [<code>ROSResponse</code>](#ROSResponse)  
-<a name="ROSResponse+data"></a>
-
-### rosResponse.data(type, id, attributes) ⇒ <code>this</code>
-Add data item to response
-
-Follows JSON API https://jsonapi.org/
+### rosResponse.toJSON() ⇒ [<code>ROSResponseObject</code>](#ROSResponseObject)
+Custom JSON stringify method
 
 **Kind**: instance method of [<code>ROSResponse</code>](#ROSResponse)  
-**Returns**: <code>this</code> - this for easy stacking  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| type | <code>string</code> | the type of the item, e.g. "Dog" |
-| id | <code>number</code> | the id of the item, e.g. 23 |
-| attributes | <code>object</code> | the actual object data |
-
 <a name="ROSResponse+error"></a>
 
 ### rosResponse.error(title, opts) ⇒ <code>this</code>
@@ -450,16 +497,39 @@ use `.send()`
 **Kind**: instance method of [<code>ROSResponse</code>](#ROSResponse)  
 <a name="ROSResponse+get"></a>
 
-### rosResponse.get(name) ⇒ <code>string</code>
-get header
-
-NOTE : this is case-sensitive
+### rosResponse.get(key) ⇒ <code>string</code>
+Get a header from a key (alias for .getHeader() c.f. express)
 
 **Kind**: instance method of [<code>ROSResponse</code>](#ROSResponse)  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| name | <code>string</code> | the name of the header |
+| key | <code>string</code> | the name of the header |
+
+<a name="ROSResponse+set"></a>
+
+### rosResponse.set(key, value) ⇒ <code>this</code>
+Add/set header (alias for .setHeader() c.f. express)
+
+**Kind**: instance method of [<code>ROSResponse</code>](#ROSResponse)  
+**Returns**: <code>this</code> - this for easy stacking  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| key | <code>string</code> | the name of the header |
+| value | <code>string</code> | the value of the header |
+
+<a name="ROSResponse+status"></a>
+
+### rosResponse.status(status) ⇒ <code>this</code>
+Set status
+
+**Kind**: instance method of [<code>ROSResponse</code>](#ROSResponse)  
+**Returns**: <code>this</code> - this for easy stacking  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| status | <code>number</code> | the HTTP status code to use |
 
 <a name="ROSResponse+json"></a>
 
@@ -492,9 +562,9 @@ Send the response.  You can only call this once.
 - <code>Error</code> error if you call this more than once
 
 
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| [data] | <code>\*</code> | <code></code> | Optional data to attach |
+| Param | Type | Description |
+| --- | --- | --- |
+| [data] | <code>\*</code> | Optional data to attach |
 
 <a name="ROSResponse+sendStatus"></a>
 
@@ -507,32 +577,50 @@ Send a status code with the name as the body
 | --- | --- | --- |
 | code | <code>number</code> | http status code |
 
-<a name="ROSResponse+set"></a>
+<a name="ROSResponse+setHeader"></a>
 
-### rosResponse.set(name, value) ⇒ <code>this</code>
-Add/set header
-
-NOTE : this is case-sensitive
+### rosResponse.setHeader(key, value) ⇒ <code>this</code>
+Set a header to value
 
 **Kind**: instance method of [<code>ROSResponse</code>](#ROSResponse)  
-**Returns**: <code>this</code> - this for easy stacking  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| name | <code>string</code> | the name of the header |
+| key | <code>string</code> | NOTE: this will be forced to lower case |
 | value | <code>string</code> | the value of the header |
 
-<a name="ROSResponse+status"></a>
+<a name="ROSResponse+getHeader"></a>
 
-### rosResponse.status(status) ⇒ <code>this</code>
-Set status
+### rosResponse.getHeader(key) ⇒ <code>string</code>
+Get a header from a key
 
 **Kind**: instance method of [<code>ROSResponse</code>](#ROSResponse)  
-**Returns**: <code>this</code> - this for easy stacking  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| status | <code>number</code> | the HTTP status code to use |
+| key | <code>string</code> | NOTE: this will be forced to lower case |
+
+<a name="ROSResponse+hasHeader"></a>
+
+### rosResponse.hasHeader(key) ⇒ <code>boolean</code>
+Check if a header exists
+
+**Kind**: instance method of [<code>ROSResponse</code>](#ROSResponse)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| key | <code>string</code> | NOTE: this will be forced to lower case |
+
+<a name="ROSResponse.new"></a>
+
+### ROSResponse.new(cb) ⇒ [<code>ROSResponse</code>](#ROSResponse)
+Create a new ROSResponse
+
+**Kind**: static method of [<code>ROSResponse</code>](#ROSResponse)  
+
+| Param | Type |
+| --- | --- |
+| cb | [<code>responseHandler</code>](#responseHandler) | 
 
 <a name="requestHandler"></a>
 
@@ -586,7 +674,7 @@ send the ROSRequest instance (no just the serialized version).
 | --- | --- | --- | --- |
 | path | <code>string</code> |  | the requested path |
 | method | <code>string</code> |  | GET, PUT, POST, etc |
-| headers | <code>object</code> |  | any header information, like 'Content-Type' |
+| headers | <code>object</code> |  | any header information, like 'content-type' (NOTE: these will be lower-cased to match express/nodejs paradigm) |
 | [params] | <code>object</code> | <code>{}</code> | any parameters captured from the path (i.e. `{ id: "15" }` for '/api/user/15') |
 | [query] | <code>object</code> | <code>{}</code> | an query parameters parsed from the path's query section (i.e. `{ limit:"15" }` for '/api/users?limit=15') |
 | body | <code>object</code> |  | an optional body (for POST/PUT/PATCH) |
@@ -601,10 +689,9 @@ This is what will be returned with to the requester.
 **Kind**: global typedef  
 **Properties**
 
-| Name | Type |
-| --- | --- |
-| status | <code>number</code> | 
-| headers | <code>object</code> | 
-| data | <code>object</code> | 
-| errors | <code>object</code> | 
+| Name | Type | Description |
+| --- | --- | --- |
+| statusCode | <code>number</code> |  |
+| headers | <code>object</code> | any header information, like 'content-type' (NOTE the key values will be lower-cased to match express/nodejs paradigm) |
+| data | <code>object</code> |  |
 

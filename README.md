@@ -21,17 +21,17 @@ Check out the [full documentation here](API.md)
 
 
 ### Request
-Incoming requests are simple native `object`, presumably transmitted over the wire using JSON.  You can do this yourself, or you can use a library like [Sockhop](https://www.npmjs.com/package/sockhop "Sockhop on NPM") or [socket.io](socket.io) -- depending on if you are in browser or not.
+Incoming requests are simple native `object`, presumably transmitted over the wire using JSON.  You can do this yourself, or you can use a library like [Sockhop](https://www.npmjs.com/package/sockhop "Sockhop on NPM") or [socket.io](socket.io) -- depending on if you are in browser or not. Alternatively, you can use the `ROSRequest` object together with the `.toJSON()` method to ensure a correct format.
 
 
 | Parameter | Type    | Example                                | Required | Notes                                                  |
 |-----------|---------|----------------------------------------|----------|--------------------------------------------------------|
-| method    | string  | "POST"                                 | Y        |                                                        |
+| method    | string  | "POST"                                 | Y        |  Must be upper-case                                    |
 | path      | string  | "/photos/cat.jpg"                      | Y        |                                                        |
-| header    | ?object | { "Content-Type": "application/json" } | N        |                                                        |
+| header    | ?object | { "content-type": "application/json" } | N        |  Ought to be lower-case keys, though this is coerced on the server |
 | body      | ?object | { "some": "data" }                     | N        |                                                        |
-| {...}     | any     |                                        | N        | User managed, passed to handler                        |
 | params    | object  | { id: 23 }                             |          |  RESERVED - auto populated from URL capture parameters |
+| query     | object  | { limit: 100 }                         |          |  RESERVED - auto populated from URL capture parameters |
 
 ```json
 {
@@ -42,11 +42,12 @@ Incoming requests are simple native `object`, presumably transmitted over the wi
 
 ## Response
 If your handler throws an exception, the error will automatically result in a HTTP style `500` response.  Routes that don't exist return a HTTP style `404` error.
+The response body will look like this. Note that the headers are coerced to be lower-case, following the express.js convention for headers.
 ```json
 {
-    "status": 200,
+    "statusCode": 200,
     "headers": {
-        "Content-Type": "text/json"
+        "content-type": "application/json"
     },
     "data": [
         {
@@ -84,10 +85,9 @@ wss.on("connection", (ws)=>{
 restos.get("/widget/:id", (req, res)=>{
 
     res
-      .set('Content-Type', 'text/json')
+      .set('Content-Type', 'text/json') // note, this gets coerced lower-case
         .status(200)
-        .data("Apple", req.params.id, { flavor: "sweet" })
-        .send();  
+        .json([{ type:"Apple", id:req.params.id, attributes:{ flavor: "sweet" }}])
 });
 ```
 #### Client using (raw) Websockets
@@ -106,7 +106,7 @@ ws.on("open", ()=>{
 
 ws.on("message", (data)=>{
 
-  console.log(data);  // {"status":200,"headers":{"Content-Type":"text/json"},"data":[{"type":"Apple","id":"23","attributes":{"flavor":"sweet"}}]}
+  console.log(data);  // {"status":200,"headers":{"content-type":"text/json"},"data":[{"type":"Apple","id":"23","attributes":{"flavor":"sweet"}}]}
   ws.close();
 });
 ```
@@ -138,10 +138,9 @@ io.on("connection", (sock)=>{
 // Add an Express-style route
 restos.get("/widget/:id", (req, res)=>{
     res
-    .set('Content-Type', 'text/json')
+    .set('Content-Type', 'text/json') // note, this gets coerced lower-case
     .status(200)
-    .data("Apple", req.params.id, { flavor: "sweet" })
-    .send();    
+    .json([{ type:"Apple", id:req.params.id, attributes:{ flavor: "sweet" }}])
 });
 ```
 #### Client using socket.io
@@ -174,10 +173,9 @@ server.on("receive", (o, meta)=>restos.receive(o, meta.callback));
 
 restos.get("/apple/:id", (req, res)=>{
     res
-      .set('Content-Type', 'text/json')
+      .set('Content-Type', 'text/json') // note, this gets coerced lower-case
         .status(200)
-        .data("Apple", req.params.id, { flavor: "sweet" })
-        .send();  
+        .json([{ type:"Apple", id:req.params.id, attributes:{ flavor: "sweet" }}])
 });
 ```
 #### Client using Sockhop callbacks (old-style)
@@ -211,10 +209,9 @@ server.on("request", (req,res,meta)=> {
 
 restos.get("/apple/:id", (req, res)=>{
     res
-      .set('Content-Type', 'text/json')
+      .set('Content-Type', 'text/json') // note, this gets coerced lower-case
         .status(200)
-        .data("Apple", req.params.id, { flavor: "sweet" })
-        .send();  
+        .json([{ type:"Apple", id:req.params.id, attributes:{ flavor: "sweet" }}])
 });
 ```
 #### Client using Sockhop requests (new-style)
