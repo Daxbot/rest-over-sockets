@@ -26,6 +26,9 @@ are hosting ROSApps more easily.</p>
 <dt><a href="#requestHandler">requestHandler</a> : <code>function</code></dt>
 <dd><p>requestHandler(req, response)</p>
 </dd>
+<dt><a href="#middlewareHandler">middlewareHandler</a> : <code>function</code></dt>
+<dd><p>middlewareHandler(req, response, next)</p>
+</dd>
 <dt><a href="#responseHandler">responseHandler</a> : <code>function</code></dt>
 <dd><p>responseHandler(response)</p>
 </dd>
@@ -58,6 +61,7 @@ Approximately an express app
     * [.post(path, handler)](#ROSApp+post) ⇒ <code>this</code>
     * [.get(path, handler)](#ROSApp+get) ⇒ <code>this</code>
     * [.patch(path, handler)](#ROSApp+patch) ⇒ <code>this</code>
+    * [.use(path, handler)](#ROSApp+use) ⇒ <code>this</code>
 
 <a name="new_ROSApp_new"></a>
 
@@ -153,6 +157,21 @@ Add a route handler for PATCH on a given path
 | --- | --- | --- |
 | path | <code>string</code> | the URL path.  Supports parameter capture, like "/dogs/:id/name" |
 | handler | [<code>requestHandler</code>](#requestHandler) | the request handler |
+
+<a name="ROSApp+use"></a>
+
+### rosApp.use(path, handler) ⇒ <code>this</code>
+Use
+
+Add a middleware handler on a path (and all paths below)
+
+**Kind**: instance method of [<code>ROSApp</code>](#ROSApp)  
+**Returns**: <code>this</code> - this a reference to ourselves, for ease in stacking  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| path | <code>string</code> | the URL path.  Supports parameter capture, like "/dogs/:id/name" |
+| handler | [<code>middlewareHandler</code>](#middlewareHandler) | the request handler |
 
 <a name="ROSClient"></a>
 
@@ -287,7 +306,7 @@ Create a new socket.io-based ROSClient
 
 | Param | Type |
 | --- | --- |
-| io | <code>\*</code> | 
+| io | <code>socketio.socket</code> | 
 
 <a name="ROSRequest"></a>
 
@@ -526,6 +545,19 @@ requestHandler(req, response)
 | --- | --- | --- |
 | req | [<code>ROSRequest</code>](#ROSRequest) | the request object |
 | response | [<code>ROSResponse</code>](#ROSResponse) | the response you are sending to the client |
+
+<a name="middlewareHandler"></a>
+
+## middlewareHandler : <code>function</code>
+middlewareHandler(req, response, next)
+
+**Kind**: global typedef  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| req | [<code>ROSRequest</code>](#ROSRequest) | the request object |
+| response | [<code>ROSResponse</code>](#ROSResponse) | the response you are sending to the client |
+| next | <code>function</code> | the callback to trigger the "next" route |
 
 <a name="responseHandler"></a>
 
