@@ -35,6 +35,33 @@ describe("REST methods",()=>{
     });
 });
 
+describe("Middleware",()=>{
+
+    it("can attach", async () => {
+        let restos=new Restos();
+
+        // Set up a route
+        restos.use("/apple", (req, res, next)=>{
+            req.id = 1;
+            return next();
+        });
+        restos.get("/apple/:id", (req, res)=>{
+            return res
+                .set('Content-Type', 'application/json')
+                .status(200)
+                .send({ id: req.id });
+        });
+
+        // Transmit a payload to the server
+        const response = await new Promise(res => restos.receive({
+            method: "GET",
+            path: "/apple/3444"
+        },res))
+
+        expect(response.data.id).to.equal(1);
+    });
+});
+
 describe("Parameters",()=>{
 
     it("params", async () => {
@@ -106,7 +133,7 @@ describe("Restos class",()=>{
         it("throws if no callback provided",()=>{
 
             let r=new Restos();
-            assert.throws(
+            assert.rejects(
                 r.receive
             );
 
