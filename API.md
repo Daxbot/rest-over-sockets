@@ -471,10 +471,7 @@ Custom JSON stringify method
 <a name="ROSResponse+error"></a>
 
 ### rosResponse.error(title, opts) ⇒ <code>this</code>
-Add error
-
-Error will appear in response as JSON API https://jsonapi.org/
-Setting an error will also delete any data you have assigned and reset the HTTP response code
+Set data as a standard "error"
 
 **Kind**: instance method of [<code>ROSResponse</code>](#ROSResponse)  
 **Returns**: <code>this</code> - this for easy stacking  
