@@ -18,7 +18,7 @@ describe("REST methods",()=>{
                 res
                     .set('Content-Type', 'application/json')
                     .status(200)
-                    .json([{ type:"Apple", id:req.params.id, attributes:{ flavor: "sweet" }}])
+                    .json([{ type:"Apple", id:req.params.id, attributes:{ flavor: "sweet" }}]);
             });
 
 
@@ -55,7 +55,7 @@ describe("Middleware",()=>{
         const response = await new Promise(res => restos.receive({
             method: "GET",
             path: "/apple/3444"
-        },res))
+        },res));
 
         expect(response.data.id).to.equal(1);
     });
@@ -78,7 +78,7 @@ describe("Parameters",()=>{
         const response = await new Promise(res => restos.receive({
             method: "GET",
             path: "/apple/3444"
-        },res))
+        },res));
 
         expect(response.data.id).to.equal("3444");
     });
@@ -98,7 +98,7 @@ describe("Parameters",()=>{
         const response = await new Promise(res => restos.receive({
             method: "GET",
             path: "/apple/3444"
-        },res))
+        },res));
 
         expect(response.data).to.be.an("object");
         expect(Object.keys(response.data).length).to.equal(0);
@@ -119,7 +119,7 @@ describe("Parameters",()=>{
         const response = await new Promise(res => restos.receive({
             method: "GET",
             path: "/apple/3444?limit=15"
-        },res))
+        },res));
 
         expect(response.data.limit).to.equal("15");
     });
